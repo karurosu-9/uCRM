@@ -24,7 +24,7 @@ const showingNavigationDropdown = ref(false);
                             <div class="flex shrink-0 items-center">
                                 <Link :href="route('dashboard')">
                                     <ApplicationLogo
-                                        class="h-[60px] w-[60px] block h-9 w-auto fill-current text-gray-800"
+                                        class="h-[50px] w-[50px] block w-auto fill-current text-gray-800"
                                     />
                                 </Link>
                             </div>
@@ -38,6 +38,12 @@ const showingNavigationDropdown = ref(false);
                                     :active="route().current('dashboard')"
                                 >
                                     Dashboard
+                                </NavLink>
+                                <NavLink
+                                    :href="route('items.index')"
+                                    :active="route().current('items.index')"
+                                >
+                                    商品管理
                                 </NavLink>
                             </div>
                         </div>
@@ -145,6 +151,12 @@ const showingNavigationDropdown = ref(false);
                             :active="route().current('dashboard')"
                         >
                             Dashboard
+                        </ResponsiveNavLink>
+                        <ResponsiveNavLink
+                            :href="route('items.index')"
+                            :active="route().current('items.index')"
+                        >
+                            商品管理
                         </ResponsiveNavLink>
                     </div>
 
