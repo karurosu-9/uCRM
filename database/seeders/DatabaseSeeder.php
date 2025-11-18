@@ -23,7 +23,8 @@ class DatabaseSeeder extends Seeder
         // ]);
 
         $this->call([
-            UserSeeder::class,
+            UserSeeder::class, // UserSeederで作成したダミーデータの呼び出し
+            ItemSeeder::class, // ItemSeederで作成したダミーデータの呼び出し
         ]);
     }
 }
