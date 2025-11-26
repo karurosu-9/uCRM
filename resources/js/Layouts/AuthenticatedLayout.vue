@@ -24,7 +24,7 @@ const showingNavigationDropdown = ref(false);
                             <div class="flex shrink-0 items-center">
                                 <Link :href="route('dashboard')">
                                     <ApplicationLogo
-                                        class="h-[50px] w-[50px] block w-auto fill-current text-gray-800"
+                                        class="block h-6 w-12 fill-current text-gray-800"
                                     />
                                 </Link>
                             </div>
