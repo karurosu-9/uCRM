@@ -17,9 +17,14 @@ class DatabaseSeeder extends Seeder
     {
         // User::factory(10)->create();
 
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
+        // User::factory()->create([
+        //     'name' => 'Test User',
+        //     'email' => 'test@example.com',
+        // ]);
+
+        $this->call([
+            UserSeeder::class, // UserSeederで作成したダミーデータの呼び出し
+            ItemSeeder::class, // ItemSeederで作成したダミーデータの呼び出し
         ]);
     }
 }
