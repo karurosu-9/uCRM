@@ -42,7 +42,7 @@ class ItemController extends Controller
 
         return redirect(route('items.index'))->with([
             'message' => '登録しました。',
-            'status' => 'delete'
+            'status' => 'success'
         ]);
     }
 
