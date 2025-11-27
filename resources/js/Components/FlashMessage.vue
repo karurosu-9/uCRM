@@ -8,7 +8,7 @@ const page = usePage();
 const flashClass = computed(() => {
     const status = page.props.flash.status
 
-    if (status === 'success') return 'bg-green-300 text-white' // 成功のステータス
+    if (status === 'success') return 'bg-green-500 text-white' // 成功のステータス
     if (status === 'delete')  return 'bg-red-500 text-white'   // 削除のステータス
     if (status === 'error')   return 'bg-red-700 text-white'   // エラーのステータス
 });
