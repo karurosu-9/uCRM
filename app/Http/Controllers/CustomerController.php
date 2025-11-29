@@ -35,7 +35,22 @@ class CustomerController extends Controller
      */
     public function store(StoreCustomerRequest $request)
     {
-        //
+        Customer::create([
+            'name'     => $request->name,
+            'kana'     => $request->kana,
+            'tel'      => $request->tel,
+            'email'    => $request->email,
+            'postcode' => $request->postcode,
+            'address'  => $request->address,
+            'birthday' => $request->birthday,
+            'gender'   => $request->gender,
+            'memo'     => $request->memo
+        ]);
+
+        return redirect(route('customers.index'))->with([
+            'status' => 'success',
+            'message' => '顧客の登録を行いました。'
+        ]);
     }
 
     /**
