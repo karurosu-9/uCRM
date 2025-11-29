@@ -1,12 +1,20 @@
 <script setup>
 import FlashMessage from "@/Components/FlashMessage.vue";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
-import { Head, Link } from "@inertiajs/vue3";
+import { Head, Link, router } from "@inertiajs/vue3";
 import Pagination from '@/Components/Pagination.vue';
+import { ref } from 'vue';
 
 defineProps({
     customers: Object,
 })
+
+const search = ref('');
+
+
+const searchCustomers = () => {
+    router.get(route('customers.index', { search: search.value })) // refの値を取得する際は、.valueが必要
+}
 
 </script>
 
@@ -30,6 +38,15 @@ defineProps({
                                 <div
                                     class="flex pl-4 my-4 lg:w-2/3 w-full mx-auto"
                                 >
+                                    <div>
+                                        <input type="text" name="search" v-model="search">
+                                        <button
+                                            class="bg-blue-500 text-white py-2 px-2 ml-2"
+                                            @click="searchCustomers"
+                                        >
+                                            検索
+                                        </button>
+                                    </div>
                                     <Link
                                         as="button"
                                         :href="route('customers.create')"
