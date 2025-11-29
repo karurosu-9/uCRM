@@ -3,6 +3,7 @@ import InputError from "@/Components/InputError.vue";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import { Head, router } from "@inertiajs/vue3";
 import { reactive } from "vue";
+import { Core as YubinbangoCore } from "yubinbango-core2"; // 郵便番号から住所の自動検索用
 
 defineProps({
     errors: Object,
@@ -19,6 +20,13 @@ const form = reactive({
     gender:   null,
     memo:     null,
 });
+
+// 郵便番号から住所の自動検索用
+const fetchAddress = () => {
+    new YubinbangoCore(String(form.postcode), (value) => {
+        form.address = value.region + value.locality + value.street
+    })
+}
 
 const storeCustomer = () => {
     router.post("/customers", form);
@@ -134,6 +142,7 @@ const storeCustomer = () => {
                                                         type="number"
                                                         id="postcode"
                                                         name="postcode"
+                                                        @change="fetchAddress" 
                                                         v-model="form.postcode"
                                                         class="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
                                                     />
