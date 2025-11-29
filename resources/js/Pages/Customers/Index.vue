@@ -2,6 +2,7 @@
 import FlashMessage from "@/Components/FlashMessage.vue";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import { Head, Link } from "@inertiajs/vue3";
+import Pagination from '@/Components/Pagination.vue';
 
 defineProps({
     customers: Object,
@@ -68,7 +69,7 @@ defineProps({
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr v-for="customer in customers" :key="customer.id">
+                                            <tr v-for="customer in customers.data" :key="customer.id">
                                                 <td class="border-b-2 border-gray-200 px-4 py-3">
                                                     <Link class="text-blue-400" :href="route('customers.show', {customer: customer.id})">
                                                         {{ customer.id }}
@@ -84,6 +85,7 @@ defineProps({
                                     </table>
                                 </div>
                             </div>
+                            <Pagination class="mt-6 ml-40" :links="customers.links"></Pagination>
                         </section>
                     </div>
                 </div>
