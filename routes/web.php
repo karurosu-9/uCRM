@@ -1,13 +1,17 @@
 <?php
 
+use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
-//itemのルーティングの設定
+// itemのルーティングの設定
 Route::resource('items', ItemController::class)->middleware('auth');
+
+// customerのルーティングの設定
+Route::resource('customers', CustomerController::class)->middleware('auth');
 
 Route::get('/', function () {
     return Inertia::render('Welcome', [
