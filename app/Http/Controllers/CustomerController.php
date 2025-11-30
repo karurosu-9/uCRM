@@ -58,7 +58,9 @@ class CustomerController extends Controller
      */
     public function show(Customer $customer)
     {
-        //
+        return Inertia::render('Customers/Show', [
+            'customer' => $customer
+        ]);
     }
 
     /**
@@ -82,6 +84,11 @@ class CustomerController extends Controller
      */
     public function destroy(Customer $customer)
     {
-        //
+        $customer->delete();
+
+        return redirect(route('customers.index'))->with([
+            'status' => 'delete',
+            'message' => '顧客を削除しました。'
+        ]);
     }
 }
