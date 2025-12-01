@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Customer;
+use App\Models\Purchase;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -28,6 +29,7 @@ class DatabaseSeeder extends Seeder
             ItemSeeder::class, // ItemSeederで作成したダミーデータの呼び出し
         ]);
 
-        Customer::factory(300)->create(); // CustomerFactoryをもとに300件分のこきゃうのダミーデータの作成
+        Customer::factory(300)->create(); // CustomerFactoryをもとに300件分の顧客のダミーデータの作成
+        Purchase::factory(300)->create(); // PurchaseFactoryをもとに300件分の購買のダーミーデータの作成
     }
 }
