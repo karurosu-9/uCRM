@@ -7,6 +7,7 @@ use App\Http\Requests\UpdatePurchaseRequest;
 use App\Models\Customer;
 use App\Models\Item;
 use App\Models\Purchase;
+use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 
 class PurchaseController extends Controller
@@ -40,7 +41,30 @@ class PurchaseController extends Controller
      */
     public function store(StorePurchaseRequest $request)
     {
-        //
+        DB::beginTransaction();
+        
+        try{
+            // Purchaseテーブルにレコードの追加
+            $purchase = Purchase::create([
+                'customer_id' => $request->customer_id,
+                'status' => $request->status,
+            ]);
+
+            // 中間テーブルにレコードの追加
+            foreach ($request->items as $item) {
+                $purchase->items()->attach($purchase->id, [
+                    'item_id' => $item['id'],
+                    'quantity' => $item['quantity'],
+                ]);
+            };
+
+            DB::commit();
+
+            return redirect(route('dashboard'));
+
+        } catch(\Exception $e) {
+            DB::rollback();
+        }
     }
 
     /**

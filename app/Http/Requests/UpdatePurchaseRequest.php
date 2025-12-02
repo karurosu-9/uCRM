@@ -22,7 +22,21 @@ class UpdatePurchaseRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'customer_id' => ['required'],
+        ];
+    }
+
+    public function attributes()
+    {
+        return [
+            'customer_id' => '会員',
+        ];
+    }
+
+    public function messages()
+    {
+        return [
+            'customer_id.required' => ':attributeが選択されていません。',
         ];
     }
 }
