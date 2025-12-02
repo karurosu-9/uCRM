@@ -53,6 +53,11 @@ const storePurchase = () => {
     });
     router.post(route("purchases.store"), form);
 };
+
+// 子コンポーネント(今回はMicroModal.vue)で作成した関数を実行する
+const setCustomerId = (id) => {
+    form.customer_id = id;
+};
 </script>
 
 <template>
@@ -97,8 +102,10 @@ const storePurchase = () => {
                                                         for="customer"
                                                         class="leading-7 text-sm text-gray-600"
                                                         >会員名</label
-                                                    ><br>
-                                                    <MicroModal />
+                                                    ><br />
+                                                    <MicroModal
+                                                        @update:customerId="setCustomerId"
+                                                    />
                                                 </div>
                                             </div>
 

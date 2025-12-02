@@ -29,10 +29,10 @@ const searchCustomers = async () => {
     }
 }
 
-// 「update:customerId」というイベントを親(Create.vue)で使用できるように宣言をしている
+// 「update:customerId」というイベントを親(今回はPruchase/Create.vue)で使用できるように宣言をしている
 const emit = defineEmits(['update:customerId']);
 
-const setCustomer = selectedCustomer => { // e は { id: 66, kana: 'ヤマダタロウ' }
+const setCustomer = selectedCustomer => { // selected は { id: 66, kana: 'ヤマダタロウ' }
     search.value = selectedCustomer.kana
     emit('update:customerId', selectedCustomer.id) // emit('update:customerId', 引数)は親側で「@update:customerId="親のメソッド名"」としていれば、親で設定した”親のメソッド名”が呼ばれる
     toggleStatus()
