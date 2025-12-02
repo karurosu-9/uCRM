@@ -3,6 +3,7 @@
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\PurchaseController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -12,6 +13,9 @@ Route::resource('items', ItemController::class)->middleware('auth');
 
 // customerのルーティングの設定
 Route::resource('customers', CustomerController::class)->middleware('auth');
+
+// purchaseのルーティングの設定
+Route::resource('purchases', PurchaseController::class)->middleware('auth');
 
 Route::get('/', function () {
     return Inertia::render('Welcome', [
