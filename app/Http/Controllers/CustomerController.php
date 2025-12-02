@@ -78,6 +78,8 @@ class CustomerController extends Controller
      */
     public function update(UpdateCustomerRequest $request, Customer $customer)
     {
+        // $customer->update($request->validated()); とすることも可能
+
         $customer->name     = $request->name;
         $customer->kana     = $request->kana;
         $customer->tel      = $request->tel;
