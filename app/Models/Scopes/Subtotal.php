@@ -13,6 +13,7 @@ class Subtotal implements Scope
      */
     public function apply(Builder $builder, Model $model): void
     {
+        // 購入履歴と小計を計算し取得するSQL
         $sql = 'SELECT purchases.id AS id,
                        item_purchase.id AS pivot_id,
                        items.price * item_purchase.quantity AS subtotal,
