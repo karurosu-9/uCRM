@@ -15,6 +15,7 @@ class Subtotal implements Scope
     {
         // 購入履歴と小計を計算し取得するSQL
         $sql = 'SELECT purchases.id AS id,
+                       items.id as item_id,
                        item_purchase.id AS pivot_id,
                        items.price * item_purchase.quantity AS subtotal,
                        customers.name AS customer_name,

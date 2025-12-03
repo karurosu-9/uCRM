@@ -76,7 +76,19 @@ class PurchaseController extends Controller
      */
     public function show(Purchase $purchase)
     {
-        //
+        // 小計 (商品ID、商品名、商品価格、数量、小計)
+        $items = Order::where('id', $purchase->id)->get();
+
+        // 合計 (購入日、購入者、合計金額)
+        $order = Order::groupBy('id')
+                    ->where('id', $purchase->id)
+                    ->selectRaw('id, sum(subtotal) as total, customer_name, status, created_at') // selectRaw()はsum()などの関数などを使用したい場合に使用する
+                    ->get();
+
+        return Inertia('Purchases/Show', [
+            'items' => $items,
+            'order' => $order
+        ]);
     }
 
     /**
