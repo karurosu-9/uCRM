@@ -3,7 +3,7 @@ import FlashMessage from "@/Components/FlashMessage.vue";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import { Head, Link, router } from "@inertiajs/vue3";
 import Pagination from '@/Components/Pagination.vue';
-import { ref } from 'vue';
+import dayjs from 'dayjs'; // 購入日の表記の修正ライブラリ
 
 defineProps({
     orders: Object
@@ -85,7 +85,7 @@ defineProps({
                                                 </td>
                                                 <td class="border-b-2 border-gray-200 px-4 py-3">{{ order.total }}</td>
                                                 <td class="border-b-2 border-gray-200 px-4 py-3">{{ order.status }}</td>
-                                                <td class="border-b-2 border-gray-200 px-4 py-3">{{ order.created_at }}</td>
+                                                <td class="border-b-2 border-gray-200 px-4 py-3">{{ dayjs(order.created_at).format('YYYY-MM-DD HH:mm:ss') }}</td>
                                             </tr>
                                         </tbody>
                                     </table>
