@@ -8,6 +8,7 @@ import MicroModal from "@/Components/MicroModal.vue";
 
 const props = defineProps({
     items: Object,
+    errors: Object
 });
 
 onMounted(() => {
@@ -97,6 +98,7 @@ const setCustomerId = (id) => {
                                             </div>
 
                                             <div class="p-2 w-full">
+                                                <InputError :message="errors.customer_id" />
                                                 <div class="relative">
                                                     <label
                                                         for="customer"
