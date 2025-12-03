@@ -33,7 +33,7 @@ class DatabaseSeeder extends Seeder
         Customer::factory(300)->create(); // CustomerFactoryをもとに300件分の顧客のダミーデータの作成
 
         $items = Item::all(); // 全ての商品の取得
-        Purchase::factory(300)->create()  // PurchaseFactoryをもとに300件分の購買と商品と購買のダーミーデータの作成
+        Purchase::factory(500)->create()  // PurchaseFactoryをもとに300件分の購買と商品と購買のダーミーデータの作成
             // each()で300件中のpurchaseデータの1件づつに対して中間テーブルへの登録処理をする
             ->each(function(Purchase $purchase) use ($items){ // use($items)で関数内で$itemsを使用できるようにする
                 $purchase->items()->attach( // 中間テーブルへのダミーデータの挿入
