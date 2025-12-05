@@ -172,7 +172,7 @@ onMounted(() => {});
                                                     </div>
                                                 </div>
 
-                                                <div class="p-2 w-full">
+                                                <div v-if="order[0].status == false" class="p-2 w-full">
                                                     <div>
                                                         <label
                                                             for="price"
@@ -188,13 +188,16 @@ onMounted(() => {});
                                                     </div>
                                                 </div>
 
-                                                <Link
-                                                    as="button"
-                                                    :href="route('purchases.edit', { purchase: order[0].id })"
-                                                    class="flex mx-auto mt-3 text-white bg-indigo-500 border-0 py-2 px-8 focus:outline-none hover:bg-indigo-600 rounded text-lg"
-                                                >
-                                                    編集
-                                                </Link>
+                                                <div v-if="order[0].status == true" class="p-2 w-full">
+                                                    <Link
+                                                        as="button"
+                                                        :href="route('purchases.edit', { purchase: order[0].id })"
+                                                        class="flex mx-auto mt-3 text-white bg-indigo-500 border-0 py-2 px-8 focus:outline-none hover:bg-indigo-600 rounded text-lg"
+                                                    >
+                                                        編集
+                                                    </Link>
+                                                </div>
+
                                             </div>
                                         </div>
                                     </div>
