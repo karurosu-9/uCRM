@@ -25,7 +25,8 @@ onMounted(() => {
 const itemList = ref([]); // 空の配列
 
 const form = reactive({
-    date: dayjs(props.order[0].created_at).format('YYYY-MM-DD HH:mm'),
+    id: props.order[0].id,
+    date: dayjs(props.order[0].created_at).format('YYYY-MM-DD'),
     customer_id: props.order[0].customer_id,
     status: props.order[0].status,
     items: [],
@@ -42,7 +43,7 @@ const totalPrice = computed(() => {
 
 const quantity = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
 
-const storePurchase = () => {
+const updatePurchase = id => {
     itemList.value.forEach((item) => {
         if (item.quantity > 0) {
             form.items.push({
@@ -51,7 +52,7 @@ const storePurchase = () => {
             });
         }
     });
-    router.post(route("purchases.store"), form);
+    router.put(route("purchases.update", {purchase: id}), form);
 };
 </script>
 
@@ -70,7 +71,7 @@ const storePurchase = () => {
                 <div class="overflow-hidden bg-white shadow-sm sm:rounded-lg">
                     <div class="p-6 text-gray-900">
                         <section class="text-gray-600 body-font relative">
-                            <form @submit.prevent="storePurchase">
+                            <form @submit.prevent="updatePurchase(form.id)">
                                 <div class="container px-5 py-8 mx-auto">
                                     <div class="lg:w-1/2 md:w-2/3 mx-auto">
                                         <div class="flex flex-wrap -m-2">
@@ -93,13 +94,13 @@ const storePurchase = () => {
                                             </div>
 
                                             <div class="p-2 w-full">
-                                                <InputError :message="errors.customer_id" />
                                                 <div class="relative">
                                                     <label
                                                         for="customer"
                                                         class="leading-7 text-sm text-gray-600"
                                                         >会員名</label
                                                     ><br />
+                                                    <!-- disabledをつけると、編集不可 + POST送信もされない -->
                                                     <input
                                                         disabled
                                                         type="text"
@@ -242,7 +243,7 @@ const storePurchase = () => {
                                                 <button
                                                     class="flex mx-auto text-white bg-indigo-500 border-0 py-2 px-8 focus:outline-none hover:bg-indigo-600 rounded text-lg"
                                                 >
-                                                    編集する
+                                                    更新する
                                                 </button>
                                             </div>
                                         </div>

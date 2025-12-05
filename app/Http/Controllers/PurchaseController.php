@@ -64,7 +64,10 @@ class PurchaseController extends Controller
 
             DB::commit();
 
-            return redirect(route('dashboard'));
+            return redirect(route('purchases.index'))->with([
+                'status' => 'success',
+                'message' => '購入履歴を更新しました。'
+            ]);
 
         } catch(\Exception $e) {
             DB::rollback();
@@ -135,7 +138,34 @@ class PurchaseController extends Controller
      */
     public function update(UpdatePurchaseRequest $request, Purchase $purchase)
     {
-        //
+        DB::beginTransaction();
+
+        try {
+            $purchase->status = $request->status;
+            $purchase->save();
+
+            $items = [];
+
+            foreach ($request->items as $item) {
+                // $itemsは $items = [];の空の配列のことで、空の配列の$itemsにid => quantityを詰めている
+                $items[$item['id']] = [
+                    'quantity' => $item['quantity']
+                ];
+            }
+
+            // 中間テーブルへの登録
+            $purchase->items()->sync($items);
+
+            DB::commit();
+
+            return redirect(route('purchases.index'))->with([
+                'status' => 'success',
+                'message' => '購入履歴を更新しました。'
+            ]);
+
+        } catch (\Exception $e) {
+            DB::rollback();
+        }
     }
 
     /**
