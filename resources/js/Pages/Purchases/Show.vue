@@ -1,73 +1,25 @@
 <script setup>
 import InputError from "@/Components/InputError.vue";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
-import { Head, router } from "@inertiajs/vue3";
+import { Head, Link, router } from "@inertiajs/vue3";
 import { onMounted, reactive, ref, computed } from "vue";
-import { getToday } from "@/common";
-import MicroModal from "@/Components/MicroModal.vue";
+import dayjs from "dayjs";
 
-const props = defineProps({
+defineProps({
     items: Object,
-    errors: Object
+    order: Object,
 });
 
-onMounted(() => {
-    form.date = getToday(); // 画面表示と同時に本日の日時を日時のフォームに表示させる
-    props.items.forEach((item) => {
-        itemList.value.push({
-            id: item.id,
-            name: item.name,
-            price: item.price,
-            quantity: 0,
-        });
-    });
-});
-
-const itemList = ref([]); // 空の配列
-
-const form = reactive({
-    date: null,
-    customer_id: null,
-    status: true,
-    items: [],
-});
-
-const totalPrice = computed(() => {
-    let total = 0;
-    itemList.value.forEach((item) => {
-        total += item.price * item.quantity;
-    });
-
-    return total;
-});
-
-const quantity = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
-
-const storePurchase = () => {
-    itemList.value.forEach((item) => {
-        if (item.quantity > 0) {
-            form.items.push({
-                id: item.id,
-                quantity: item.quantity,
-            });
-        }
-    });
-    router.post(route("purchases.store"), form);
-};
-
-// 子コンポーネント(今回はMicroModal.vue)で作成した関数を実行する
-const setCustomerId = (id) => {
-    form.customer_id = id;
-};
+onMounted(() => {});
 </script>
 
 <template>
-    <Head title="購入画面" />
+    <Head title="購入履歴 詳細画面" />
 
     <AuthenticatedLayout>
         <template #header>
             <h2 class="text-xl font-semibold leading-tight text-gray-800">
-                購入画面
+                購入履歴 詳細画面
             </h2>
         </template>
 
@@ -85,29 +37,32 @@ const setCustomerId = (id) => {
                                                     <label
                                                         for="date"
                                                         class="leading-7 text-sm text-gray-600"
-                                                        >日付</label
+                                                        >購入日</label
                                                     >
-                                                    <input
-                                                        type="date"
+                                                    <div
                                                         id="date"
                                                         name="date"
-                                                        v-model="form.date"
                                                         class="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
-                                                    />
+                                                    >
+                                                        {{ dayjs(order[0].created_at).format("YYYY-MM-DD HH:mm") }}
+                                                    </div>
                                                 </div>
                                             </div>
 
                                             <div class="p-2 w-full">
-                                                <InputError :message="errors.customer_id" />
                                                 <div class="relative">
                                                     <label
                                                         for="customer"
                                                         class="leading-7 text-sm text-gray-600"
                                                         >会員名</label
                                                     ><br />
-                                                    <MicroModal
-                                                        @update:customerId="setCustomerId"
-                                                    />
+                                                    <div
+                                                        id="customer"
+                                                        name="customer"
+                                                        class="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
+                                                    >
+                                                        {{ order[0].customer_name }}
+                                                    </div>
                                                 </div>
                                             </div>
 
@@ -148,50 +103,31 @@ const setCustomerId = (id) => {
                                                     </thead>
                                                     <tbody>
                                                         <tr
-                                                            v-for="item in itemList"
-                                                            :key="item.id"
-                                                        >
+                                                            v-for="item in items" :key="item.id">
                                                             <td
                                                                 class="border-b-2 border-gray-200 px-4 py-3"
                                                             >
-                                                                {{ item.id }}
+                                                                {{ item.item_id }}
                                                             </td>
                                                             <td
                                                                 class="border-b-2 border-gray-200 px-4 py-3"
                                                             >
-                                                                {{ item.name }}
+                                                                {{ item.item_name }}
                                                             </td>
                                                             <td
                                                                 class="border-b-2 border-gray-200 px-4 py-3"
                                                             >
-                                                                {{ item.price }}
+                                                                {{ item.item_price }}
                                                             </td>
                                                             <td
                                                                 class="border-b-2 border-gray-200 px-4 py-3 text-lg text-gray-900"
                                                             >
-                                                                <select
-                                                                    name="quantity"
-                                                                    v-model="
-                                                                        item.quantity
-                                                                    "
-                                                                >
-                                                                    <option
-                                                                        v-for="q in quantity"
-                                                                        :value="
-                                                                            q
-                                                                        "
-                                                                    >
-                                                                        {{ q }}
-                                                                    </option>
-                                                                </select>
+                                                                {{ item.quantity }}
                                                             </td>
                                                             <td
                                                                 class="border-b-2 border-gray-200 px-4 py-3"
                                                             >
-                                                                {{
-                                                                    item.price *
-                                                                    item.quantity
-                                                                }}
+                                                                {{ item.subtotal }}
                                                             </td>
                                                         </tr>
                                                     </tbody>
@@ -199,26 +135,69 @@ const setCustomerId = (id) => {
                                             </div>
 
                                             <div class="p-2 w-full">
-                                                <div>
-                                                    <label
-                                                        for="price"
-                                                        class="leading-7 text-sm text-gray-600"
-                                                        >合計金額</label
-                                                    >
-                                                    <div
-                                                        class="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
-                                                    >
-                                                        {{ totalPrice }} 円
+                                                <div class="p-2 w-full">
+                                                    <div>
+                                                        <label
+                                                            for="price"
+                                                            class="leading-7 text-sm text-gray-600"
+                                                            >合計金額</label
+                                                        >
+                                                        <div
+                                                            class="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
+                                                        >
+                                                            {{ order[0].total }} 円
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
 
-                                            <div class="p-2 w-full">
-                                                <button
-                                                    class="flex mx-auto text-white bg-indigo-500 border-0 py-2 px-8 focus:outline-none hover:bg-indigo-600 rounded text-lg"
-                                                >
-                                                    購入する
-                                                </button>
+                                                <div class="p-2 w-full">
+                                                    <div>
+                                                        <label
+                                                            for="price"
+                                                            class="leading-7 text-sm text-gray-600"
+                                                            >ステータス</label
+                                                        >
+                                                        <div
+                                                            v-if="order[0].status == true"
+                                                            class="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
+                                                        >
+                                                            未キャンセル
+                                                        </div>
+                                                        <div
+                                                            v-if="order[0].status == false"
+                                                            class="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
+                                                        >
+                                                            キャンセル済み
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div v-if="order[0].status == false" class="p-2 w-full">
+                                                    <div>
+                                                        <label
+                                                            for="price"
+                                                            class="leading-7 text-sm text-gray-600"
+                                                            >キャンセル日</label
+                                                        >
+                                                        <div
+                                                            v-if="order[0].status == false"
+                                                            class="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
+                                                        >
+                                                            {{ dayjs(order[0].updated_at).format('YYYY-MM-DD HH:mm') }}
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div v-if="order[0].status == true" class="p-2 w-full">
+                                                    <Link
+                                                        as="button"
+                                                        :href="route('purchases.edit', { purchase: order[0].id })"
+                                                        class="flex mx-auto mt-3 text-white bg-indigo-500 border-0 py-2 px-8 focus:outline-none hover:bg-indigo-600 rounded text-lg"
+                                                    >
+                                                        編集
+                                                    </Link>
+                                                </div>
+
                                             </div>
                                         </div>
                                     </div>
