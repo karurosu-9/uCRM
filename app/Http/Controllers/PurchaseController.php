@@ -96,7 +96,38 @@ class PurchaseController extends Controller
      */
     public function edit(Purchase $purchase)
     {
-        //
+        $purchase = Purchase::find($purchase->id);
+
+        // 全ての商品を取得
+        $allItems = Item::select('id', 'name', 'price')->get();
+
+        $items = [];
+        foreach ($allItems as $allItem) {
+            $quantity = 0;
+            // 全ての商品からpurchaseIDに紐づく商品だけを取得
+            foreach ($purchase->items as $item) { // 中間テーブルに登録されている数量を各商品に格納する
+                if ($allItem->id === $item->id) {
+                    $quantity = $item->pivot->quantity;
+                }
+            };
+            array_push($items, [
+                'id' => $allItem->id,
+                'name' => $allItem->name,
+                'price' => $allItem->price,
+                'quantity' => $quantity
+            ]);
+        };
+
+        // スコープを利用して顧客情報の取得
+        $order = Order::groupBy('id')
+                    ->where('id', $purchase->id)
+                    ->selectRaw('id, customer_id, customer_name, status, created_at')
+                    ->get();
+
+        return Inertia('Purchases/Edit', [
+            'items' => $items,
+            'order' => $order
+        ]);
     }
 
     /**
