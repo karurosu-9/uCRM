@@ -3,6 +3,7 @@ import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import { Head } from "@inertiajs/vue3";
 import { onMounted, reactive } from "vue";
 import { getToday } from "@/common";
+import Chart from "@/Components/Chart.vue";
 
 onMounted(() => {
     form.startDate = getToday();
@@ -29,6 +30,8 @@ const getData = async () => {
             })
             .then((res) => {
                 resData.data = res.data.data;
+                resData.labels = res.data.labels;
+                resData.totals = res.data.totals;
                 console.log(res.data);
             });
     } catch (e) {
@@ -70,6 +73,12 @@ const getData = async () => {
                                 分析する
                             </button>
                         </form>
+
+                        <!-- 日別の売上のグラフの表示 -->
+                        <div v-show="resData.data">
+                            <Chart :data="resData"/>
+                        </div>
+
                         <div v-show="resData.data" class="lg:w-2/3 mt-5 w-full mx-auto overflow-auto">
                             <table
                                 class="table-auto w-full text-left whitespace-no-wrap"
