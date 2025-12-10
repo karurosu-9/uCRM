@@ -54,24 +54,34 @@ const getData = async () => {
             <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
                 <div class="overflow-hidden bg-white shadow-sm sm:rounded-lg">
                     <div class="p-6 text-gray-900">
-                        <form @submit.prevent="getData" class="flex items-center gap-4">
-                            From:
-                            <input
-                                type="date"
-                                name="startDate"
-                                v-model="form.startDate"
-                            />
-                            To:
-                            <input
-                                type="date"
-                                name="endDate"
-                                v-model="form.endDate"
-                            />
-                            <button
-                                class="ml-4 text-white bg-indigo-500 border-0 py-2 px-8 focus:outline-none hover:bg-indigo-600 rounded text-lg"
-                            >
-                                分析する
-                            </button>
+                        <form @submit.prevent="getData" class="space-y-4">
+                            分析方法<br>
+                            <div>
+                                <input type="radio" v-model="form.type" value="perDay" checked><span class="mr-2">日別</span>
+                                <input type="radio" v-model="form.type" value="perMonth"><span class="mr-2">月別</span>
+                                <input type="radio" v-model="form.type" value="perYear"><span class="mr-2">年別</span>
+                            </div>
+
+                            <div class="flex items-center gap-4">
+                                From:
+                                <input
+                                    type="date"
+                                    name="startDate"
+                                    v-model="form.startDate"
+                                />
+                                To:
+                                <input
+                                    type="date"
+                                    name="endDate"
+                                    v-model="form.endDate"
+                                />
+                                <button
+                                    class="ml-4 text-white bg-indigo-500 border-0 py-2 px-8 focus:outline-none hover:bg-indigo-600 rounded text-lg"
+                                >
+                                    分析する
+                                </button>
+                            </div>
+
                         </form>
 
                         <!-- 日別の売上のグラフの表示 -->
